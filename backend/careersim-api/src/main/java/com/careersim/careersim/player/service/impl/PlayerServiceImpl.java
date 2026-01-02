@@ -1,5 +1,7 @@
 package com.careersim.careersim.player.service.impl;
 
+import com.careersim.careersim.player.dto.CreatePlayerRequestDTO;
+import com.careersim.careersim.player.dto.PlayerResponseDTO;
 import com.careersim.careersim.player.model.Player;
 import com.careersim.careersim.player.repository.PlayerRepository;
 import com.careersim.careersim.player.service.PlayerService;
@@ -17,10 +19,27 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player createPlayer(String name, String position, UUID clubId) {
+    public PlayerResponseDTO createPlayer(CreatePlayerRequestDTO request) {
 
-        
+        Player player = Player.create(
+                request.name(),
+                request. age(),
+                request.position(),
+                request.overall(),
+                request.potential(),
+                request. clubId()
+        );
 
-        return null;
+        Player saved = playerRepository.save(player);
+
+        return new PlayerResponseDTO(
+                saved.getId(),
+                saved. getName(),
+                saved.getAge(),
+                saved.getPosition(),
+                saved.getOverall(),
+                saved.getPotential(),
+                saved.getClubId()
+        );
     }
 }

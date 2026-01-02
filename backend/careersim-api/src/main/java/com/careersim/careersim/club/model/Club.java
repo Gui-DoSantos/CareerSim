@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@Table(name = "clubs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Club {
 

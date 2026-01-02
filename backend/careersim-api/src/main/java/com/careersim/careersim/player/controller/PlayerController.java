@@ -1,13 +1,12 @@
 package com.careersim.careersim.player.controller;
 
-import com.careersim.careersim.player.dto.CreatePlayerRequest;
+import com.careersim.careersim.player.dto.CreatePlayerRequestDTO;
+import com.careersim.careersim.player.dto.PlayerResponseDTO;
 import com.careersim.careersim.player.model.Player;
 import com.careersim.careersim.player.service.PlayerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/players")
@@ -20,14 +19,8 @@ public class PlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<Player> create(@RequestBody CreatePlayerRequest request) {
-
-        Player player = playerService.createPlayer(
-                request.getName(),
-                request.getPosition(),
-                request.getClubId()
-        );
-
-        return ResponseEntity.ok(player);
+    @ResponseStatus(HttpStatus.CREATED)
+    public PlayerResponseDTO create(@RequestBody CreatePlayerRequestDTO request) {
+        return playerService.createPlayer(request);
     }
 }
