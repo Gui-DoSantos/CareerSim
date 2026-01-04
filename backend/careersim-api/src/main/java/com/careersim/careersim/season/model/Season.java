@@ -41,4 +41,20 @@ public class Season {
         this.status = SeasonStatus.ACTIVE;
     }
 
+    public static Season create(Player player, Integer year) {
+        return new Season(player, year);
+    }
+
+    public void advance() {
+        this.currentEvent++;
+    }
+
+    public void complete() {
+        this.status = SeasonStatus.FINISHED;
+    }
+
+    public UUID getPlayerId() {
+        return this.player != null ? this.player.getId() : null;
+    }
+
 }

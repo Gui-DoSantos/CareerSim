@@ -2,9 +2,11 @@ package com.careersim.careersim.season.service;
 
 import com.careersim.careersim.player.model.Player;
 import com.careersim.careersim.player.repository.PlayerRepository;
+import com.careersim.careersim.season.dto.SeasonResponseDTO;
 import com.careersim.careersim.season.model.Season;
 import com.careersim.careersim.season.model.SeasonStatus;
 import com.careersim.careersim.season.repository.SeasonRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -21,35 +23,53 @@ public class SeasonService {
     }
 
     // Criar temporada
-    public Season CreateSeason(UUID id, Integer year) {
-        Player player = playerRepository.findById(id)
+    @Transactional
+    public SeasonResponseDTO createSeason(UUID playerId, Integer year) {
+        Player player = playerRepository.findById(playerId)
                 .orElseThrow(() -> new RuntimeException("Jogador não encontrado"));
 
-        Season season = new Season(player, year);
-        return seasonRepository.save(season);
+        Season season = Season.create(player, year);
+        Season saved = seasonRepository.save(season);
+
+        return toDTO(saved);
     }
+
 
     // Buscar Temporada
 
-    public Season getActiveSeason(UUID id) {
-        return seasonRepository.findByPlayerIdAndStatus(id, SeasonStatus.ACTIVE);
+    public SeasonResponseDTO getActiveSeason(UUID playerId) {
+        Season season = seasonRepository.findByPlayerIdAndStatus(playerId, SeasonStatus.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("Temporada ativa não encontrada"));
+
+        return toDTO(season);
+    // Avançar
+}
+        @Transactional
+        public SeasonResponseDTO advanceSeason(UUID playerId) {
+            Season season = seasonRepository.findByPlayerIdAndStatus(playerId, SeasonStatus.ACTIVE)
+                    .orElseThrow(() -> new RuntimeException("Temporada ativa não encontrada"));
+
+            if (season.getCurrentEvent() >= 38) {
+                throw new RuntimeException("Temporada já finalizada");
+            }
+
+            season.advance();
+
+            if (season. getCurrentEvent() == 38) {
+                season.complete();
+            }
+
+            Season saved = seasonRepository.save(season);
+            return toDTO(saved);
     }
 
-    // Avançar
-
-    public Season advenceSeason(UUID id) {
-        Season season =  getActiveSeason(id);
-
-        if (season.getCurrentEvent() >= 39) {
-            throw new RuntimeException("Temporada já finalizada");
-        }
-
-        season.setCurrentEvent(season.getCurrentEvent() + 1);
-
-        if (season.getCurrentEvent() == 39) {
-            season. setStatus(SeasonStatus.FINISHED);
-        }
-
-        return seasonRepository.save(season);
+    private SeasonResponseDTO toDTO(Season season) {
+        return new SeasonResponseDTO(
+                season.getId(),
+                season.getPlayerId(),
+                season.getYear(),
+                season.getCurrentEvent(),
+                season.getStatus()
+        );
     }
 }
