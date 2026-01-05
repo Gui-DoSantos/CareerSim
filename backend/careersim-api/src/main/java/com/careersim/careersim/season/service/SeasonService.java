@@ -38,7 +38,7 @@ public class SeasonService {
     // Buscar Temporada
 
     public SeasonResponseDTO getActiveSeason(UUID playerId) {
-        Season season = seasonRepository.findByPlayerIdAndStatus(playerId, SeasonStatus.ACTIVE)
+        Season season = seasonRepository.findByPlayer_IdAndStatus(playerId, SeasonStatus.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("Temporada ativa não encontrada"));
 
         return toDTO(season);
@@ -46,7 +46,7 @@ public class SeasonService {
 }
         @Transactional
         public SeasonResponseDTO advanceSeason(UUID playerId) {
-            Season season = seasonRepository.findByPlayerIdAndStatus(playerId, SeasonStatus.ACTIVE)
+            Season season = seasonRepository.findByPlayer_IdAndStatus(playerId, SeasonStatus.ACTIVE)
                     .orElseThrow(() -> new RuntimeException("Temporada ativa não encontrada"));
 
             if (season.getCurrentEvent() >= 38) {

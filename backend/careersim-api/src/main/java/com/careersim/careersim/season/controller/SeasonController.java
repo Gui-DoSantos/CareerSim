@@ -1,7 +1,9 @@
 package com.careersim.careersim.season.controller;
 
+import com.careersim.careersim.season.dto.SeasonResponseDTO;
 import com.careersim.careersim.season.model.Season;
 import com.careersim.careersim.season.service.SeasonService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,21 +18,19 @@ public class SeasonController {
         this.seasonService = seasonService;
     }
 
-    // POST /api/seasons? playerId=xxx&year=2025
     @PostMapping
-    public Season createSeason(@RequestParam UUID playerId, @RequestParam Integer year) {
-        return seasonService.CreateSeason(playerId, year);
+    @ResponseStatus(HttpStatus.CREATED)
+    public SeasonResponseDTO createSeason(@RequestParam UUID playerId, @RequestParam Integer year) {
+        return seasonService.createSeason(playerId, year);  // ✅ minúsculo
     }
 
-    // GET /api/seasons/active?playerId=xxx
     @GetMapping("/active")
-    public Season getActiveSeason(@RequestParam UUID playerId) {
-        return seasonService.getActiveSeason(playerId);
+    public SeasonResponseDTO getActiveSeason(@RequestParam UUID playerId) {
+        return seasonService.getActiveSeason(playerId);  // ✅ retorna DTO
     }
 
-    // POST /api/seasons/advance?playerId=xxx
     @PostMapping("/advance")
-    public Season advanceEvent(@RequestParam UUID playerId) {
-        return seasonService.advenceSeason(playerId);
+    public SeasonResponseDTO advanceEvent(@RequestParam UUID playerId) {
+        return seasonService.advanceSeason(playerId);  // ✅ nome correto
     }
 }

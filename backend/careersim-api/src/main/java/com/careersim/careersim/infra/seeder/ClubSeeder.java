@@ -81,7 +81,6 @@ public class ClubSeeder implements CommandLineRunner {
 
 
         //  LA LIGA (ESPANHA)
-        // ==========================================
         // Os Gigantes
         create("Real Madrid", ClubTier.TIER_5);
         create("Barcelona", ClubTier.TIER_5);
