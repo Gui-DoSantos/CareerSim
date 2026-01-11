@@ -1,11 +1,13 @@
 package com.careersim.careersim.player.dto;
 
+import com.careersim.careersim.player.model.Position;
+
 import java.util.UUID;
 
 public record CreatePlayerRequestDTO(
         String name,
         Integer age,
-        String position,
+        Position position,
         Integer overall,
         Integer potential,
         UUID clubId
