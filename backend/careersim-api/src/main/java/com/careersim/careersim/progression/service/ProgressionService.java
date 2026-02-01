@@ -1,5 +1,7 @@
 package com.careersim.careersim. progression.service;
 
+import com.careersim.careersim.event.model.EventType;
+import com.careersim.careersim.event.service.EventService;
 import com. careersim.careersim. player.model.Player;
 import com.careersim.careersim.player.repository.PlayerRepository;
 import com.careersim.careersim.progression.dto.GainXpResponseDTO;
@@ -19,6 +21,7 @@ public class ProgressionService {
 
     private final PlayerRepository playerRepository;
     private final PlayerSkillNodeRepository playerSkillNodeRepository;
+    private final EventService eventService;
 
 
     @Transactional
@@ -32,9 +35,28 @@ public class ProgressionService {
 
         boolean leveledUp = player.gainExperience(xpAmount);
 
+
+
         playerRepository.save(player);
 
         int pointsGained = leveledUp ? 3 : 0;
+
+        if (leveledUp) {
+
+            String title = "Você subiu de nível!";
+            String description = String.format(
+                    "Parabéns! Você alcançou o nível %d e ganhou %d pontos de treino.",
+                    player.getLevel(),
+                    pointsGained
+            );
+
+            eventService.createSystemEvent(
+                    playerId,
+                    EventType.LEVEL_UP,
+                    title,
+                    description
+            );
+        }
 
         return new GainXpResponseDTO(
                 xpAmount,
@@ -46,7 +68,7 @@ public class ProgressionService {
         );
     }
 
-  -
+
     @Transactional(readOnly = true)
     public PlayerProgressionDTO getPlayerProgression(UUID playerId) {
         Player player = playerRepository.findById(playerId)
@@ -77,19 +99,10 @@ public class ProgressionService {
         Player player = playerRepository.findById(playerId)
                 .orElseThrow(() -> new RuntimeException("Player não encontrado"));
 
-
-        player.setLevel(1);
-        player.setExperience(0);
-        player.setTrainingPoints(0);
-
-        // Remove todos os nós desbloqueados
         playerSkillNodeRepository.deleteByPlayerId(playerId);
 
-        // Reset dos atributos para valores iniciais
-        player.setAttributes(
-                com.careersim.careersim.player.model.PlayerAttributes
-                        .createForPosition(player.getPosition(), player.getOverall())
-        );
+
+        player.resetProgression();
 
         playerRepository.save(player);
     }

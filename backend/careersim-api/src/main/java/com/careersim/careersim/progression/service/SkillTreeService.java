@@ -1,5 +1,7 @@
 package com.careersim.careersim. progression.service;
 
+import com.careersim.careersim.event.model.EventType;
+import com.careersim.careersim.event.service.EventService;
 import com. careersim.careersim. player.model.Player;
 import com.careersim.careersim.player.model.PlayerAttributes;
 import com.careersim.careersim.player.repository.PlayerRepository;
@@ -24,6 +26,7 @@ public class SkillTreeService {
     private final SkillNodeRepository skillNodeRepository;
     private final PlayerSkillNodeRepository playerSkillNodeRepository;
     private final PlayerRepository playerRepository;
+    private final EventService eventService;
 
 
     @Transactional(readOnly = true)
@@ -89,6 +92,22 @@ public class SkillTreeService {
         // 8. Registrar nó como desbloqueado
         PlayerSkillNode unlock = new PlayerSkillNode(player, node);
         playerSkillNodeRepository.save(unlock);
+
+        String title = "Skill desbloqueada: " + node.getName();
+        String description = String.format(
+                "Você desbloqueou %s! %s",
+                node.getName(),
+                node.getDescription()
+        );
+
+        eventService.createSystemEvent(
+                playerId,
+                EventType.SKILL_UNLOCKED,
+                title,
+                description,
+                node.getId(),
+                "SkillNode"
+        );
 
         // 9. Salvar player (atributos mudaram, overall recalcula automaticamente)
         playerRepository.save(player);

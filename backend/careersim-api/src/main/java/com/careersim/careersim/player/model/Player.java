@@ -51,7 +51,7 @@ public class Player {
 
 
     private Player(String name, Integer age, Position  position, Integer overall, Integer potential, UUID clubId) {
-        this.id = UUID. randomUUID();
+        this.id = UUID.randomUUID();
         this.name = name;
         this.age = age;
         this.position = position;
@@ -59,7 +59,7 @@ public class Player {
         this.potential = potential;
         this.clubId = clubId;
         this.level = 1;
-        this. experience = 0;
+        this.experience = 0;
         this.trainingPoints = 0;
 
         this.attributes = PlayerAttributes.createForPosition(position, overall);
@@ -110,4 +110,25 @@ public class Player {
         }
         return false;
     }
+
+    public void resetProgression() {
+        this.level = 1;
+        this.experience = 0;
+        this.trainingPoints = 0;
+
+        this.attributes = PlayerAttributes.createForPosition(this.position, this.overall);
+    }
+
+
+    public void setAttributes(PlayerAttributes attributes) {
+        this.attributes = attributes;
+        if (this.position != null) {
+            this.overall = this.attributes.calculateOverall(this.position);
+        }
+    }
+    public void transferToClub(UUID newClubId) {
+        this.clubId = newClubId;
+    }
+
+
 }

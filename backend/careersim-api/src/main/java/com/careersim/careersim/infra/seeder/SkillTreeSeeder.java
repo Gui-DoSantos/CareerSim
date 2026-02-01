@@ -412,7 +412,7 @@ public class SkillTreeSeeder implements CommandLineRunner {
         SkillNode tier5 = createNode(
                 "physical_Camisa_8_Motor",
                 "Arquétipo Camisa 8 – Motor",
-                "Domínio físico absoluto. O atleta se torna uma força imparável em divididas e disputas aéreas.",
+                "Domínio físico absoluto. O atleta se torna uma força imparável em divididas.",
                 SkillCategory.PHYSICAL,
                 5, 10, null,
                 200, 330
@@ -600,7 +600,7 @@ public class SkillTreeSeeder implements CommandLineRunner {
 
         SkillNode tier5 = createNode(
                 "defending_imperador",
-                "Arquétipo Camisa 5 - O imperador",
+                "Arquétipo Camisa 5 - O Imperador",
                 "defesa perfeita",
                 SkillCategory.DEFENDING,
                 5, 10, null,
@@ -1360,7 +1360,7 @@ public class SkillTreeSeeder implements CommandLineRunner {
         SkillNode tier5 = createNode(
                 "goalkeeper_sao_goleiro",
                 "Arquétipo Camisa 1 - Polvo",
-                "O santo padroeiro dos goleiros - perfeição divina",
+                "O santo dos goleiros - perfeição divina",
                 SkillCategory.GOALKEEPER,
                 5, 10, null,
                 200, 330
