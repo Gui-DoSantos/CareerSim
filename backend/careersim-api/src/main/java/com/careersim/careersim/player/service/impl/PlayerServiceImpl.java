@@ -34,11 +34,12 @@ public class PlayerServiceImpl implements PlayerService {
 
         return new PlayerResponseDTO(
                 saved.getId(),
-                saved. getName(),
+                saved.getName(),
                 saved.getAge(),
                 saved.getPosition(),
                 saved.getOverall(),
                 saved.getPotential(),
+                saved.getAttributes(),
                 saved.getClubId()
         );
     }

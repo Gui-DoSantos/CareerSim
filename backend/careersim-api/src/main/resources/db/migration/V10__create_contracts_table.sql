@@ -1,7 +1,7 @@
 CREATE TABLE contracts (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    player_id UUID NOT NULL,
-    club_id UUID NOT NULL,
+    id BINARY(16) PRIMARY KEY,
+    player_id BINARY(16) NOT NULL,
+    club_id BINARY(16) NOT NULL,
     salary BIGINT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE contracts (
     signing_bonus BIGINT DEFAULT 0,
     release_clause BIGINT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_contract_player FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE,
     CONSTRAINT fk_contract_club FOREIGN KEY (club_id) REFERENCES clubs(id) ON DELETE CASCADE,

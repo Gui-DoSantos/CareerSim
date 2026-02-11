@@ -1,8 +1,7 @@
-
 CREATE TABLE matches (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    player_id UUID NOT NULL,
-    club_id UUID NOT NULL,
+    id BINARY(16) PRIMARY KEY,
+    player_id BINARY(16) NOT NULL,
+    club_id BINARY(16) NOT NULL,
     opponent_name VARCHAR(100) NOT NULL,
     competition VARCHAR(100) NOT NULL,
     match_date TIMESTAMP NOT NULL,
@@ -11,7 +10,7 @@ CREATE TABLE matches (
     player_team_score INTEGER,
     opponent_team_score INTEGER,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_match_player FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE,
     CONSTRAINT fk_match_club FOREIGN KEY (club_id) REFERENCES clubs(id) ON DELETE CASCADE,
@@ -26,9 +25,9 @@ CREATE INDEX idx_matches_status ON matches(status);
 -- Performance individual do player na partida
 
 CREATE TABLE match_performances (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    match_id UUID NOT NULL,
-    player_id UUID NOT NULL,
+    id BINARY(16) PRIMARY KEY,
+    match_id BINARY(16) NOT NULL,
+    player_id BINARY(16) NOT NULL,
     minutes_played INTEGER NOT NULL DEFAULT 0,
     goals INTEGER NOT NULL DEFAULT 0,
     assists INTEGER NOT NULL DEFAULT 0,
@@ -61,17 +60,17 @@ CREATE INDEX idx_performance_rating ON match_performances(rating);
 -- Eventos que acontecem durante a partida
 
 CREATE TABLE match_events (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    match_id UUID NOT NULL,
-    player_id UUID,
+    id BINARY(16) PRIMARY KEY,
+    match_id BINARY(16) NOT NULL,
+    player_id BINARY(16),
     event_type VARCHAR(30) NOT NULL,
     minute INTEGER NOT NULL,
     description TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_event_match FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE CASCADE,
-    CONSTRAINT fk_event_player FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE SET NULL,
-    CONSTRAINT chk_event_type CHECK (event_type IN (
+    CONSTRAINT fk_match_event_match FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE CASCADE,
+    CONSTRAINT fk_match_event_player FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE SET NULL,
+    CONSTRAINT chk_match_event_type CHECK (event_type IN (
         'GOAL', 'ASSIST', 'YELLOW_CARD', 'RED_CARD',
         'SUBSTITUTION_IN', 'SUBSTITUTION_OUT',
         'INJURY', 'PENALTY_SCORED', 'PENALTY_MISSED',
@@ -80,9 +79,7 @@ CREATE TABLE match_events (
     CONSTRAINT chk_minute_valid CHECK (minute >= 0 AND minute <= 120)
 );
 
-CREATE INDEX idx_event_match ON match_events(match_id);
-CREATE INDEX idx_event_player ON match_events(player_id);
-CREATE INDEX idx_event_type ON match_events(event_type);
-CREATE INDEX idx_event_minute ON match_events(minute);
-
-
+CREATE INDEX idx_match_events_match ON match_events(match_id);
+CREATE INDEX idx_match_events_player ON match_events(player_id);
+CREATE INDEX idx_match_events_type ON match_events(event_type);
+CREATE INDEX idx_match_events_minute ON match_events(minute);

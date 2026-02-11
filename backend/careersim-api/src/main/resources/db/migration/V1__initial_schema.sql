@@ -18,7 +18,6 @@ CREATE TABLE players (
     age INT NOT NULL,
     position VARCHAR(20) NOT NULL,
     overall INT NOT NULL,
-    potential INT NOT NULL,
     club_id BINARY(16),
     FOREIGN KEY (club_id) REFERENCES clubs(id)
 );

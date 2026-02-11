@@ -1,11 +1,10 @@
-
 CREATE TABLE events (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    player_id UUID NOT NULL,
+    id BINARY(16) PRIMARY KEY,
+    player_id BINARY(16) NOT NULL,
     event_type VARCHAR(50) NOT NULL,
     title VARCHAR(200) NOT NULL,
     description TEXT,
-    reference_id UUID,
+    reference_id BINARY(16),
     reference_type VARCHAR(50),
     is_read BOOLEAN NOT NULL DEFAULT false,
     occurred_at TIMESTAMP NOT NULL,

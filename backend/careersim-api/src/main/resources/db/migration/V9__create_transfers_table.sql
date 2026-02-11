@@ -1,8 +1,8 @@
 CREATE TABLE transfers (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    player_id UUID NOT NULL,
-    from_club_id UUID,
-    to_club_id UUID NOT NULL,
+    id BINARY(16) PRIMARY KEY,
+    player_id BINARY(16) NOT NULL,
+    from_club_id BINARY(16),
+    to_club_id BINARY(16) NOT NULL,
     transfer_amount BIGINT NOT NULL,
     salary BIGINT NOT NULL,
     contract_years INTEGER NOT NULL,

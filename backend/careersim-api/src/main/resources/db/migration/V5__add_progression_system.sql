@@ -14,7 +14,7 @@ CREATE TABLE skill_nodes (
     icon VARCHAR(50),
     position_x INTEGER,
     position_y INTEGER
-
+);
 
 CREATE TABLE skill_node_effects (
     id BINARY(16) PRIMARY KEY,
